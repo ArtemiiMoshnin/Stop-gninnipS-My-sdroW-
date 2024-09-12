@@ -1,0 +1,68 @@
+const reverseLongWords = (str) => {
+
+    let word = "";  
+    let words = [];    
+
+    // Разделение строки на слова
+    for (let i = 0; i < str.length; i++) {
+        if (str[i] !== ' ') { // Если символ не пробел, добавляем его в текущее слово
+            // Формируем слово
+            word = word + str[i];
+        }  
+
+        if (str[i] === ' ') {  //Если встретили пробел и...
+        if (word !== "") {    //...и слово не пустое (проверка на отсутсвие двух пробелов), добавляем его в массив
+            words.push(word);
+            word = "";  // Очищаем переменную для следующего слова
+        }
+        }
+        }
+        words.push(word); //Последнее слово накапливается в word, но пробела больше нет. После цикла мы и его добавляем с помощью words.push(word).
+
+
+    // Фильтрация слов длиной 5 и более символов
+    let longWords = [];
+    for (let i = 0; i < words.length; i++) {
+        if (words[i].length >= 5) {
+            longWords.push(words[i]);
+        }
+    }
+
+    // Переворот слов
+    let reversedWords = [];
+    for (let i = 0; i < longWords.length; i++) {
+        let reversedWord = "";
+        let currentWord = longWords[i];
+        for (let j = currentWord.length - 1; j >= 0; j--) {
+            reversedWord = reversedWord + currentWord[j];
+        }
+        reversedWords.push(reversedWord);
+    }
+
+    // Замена длинных слов на перевернутые в исходном массиве
+    for (let i = 0; i < words.length; i++) {
+        if (words[i].length >= 5) {
+            // Ищем индекс текущего слова в массиве longWords. 
+            //P.S. Я не знал что через indexOf можно искать элементы в массиве.
+            //И в целом эту часть труднее всего было реализовать. Тут GTP оч помог
+            let indexInLongWords = longWords.indexOf(words[i]); //indexOf ищет индекс первого вхождения words[i] в массиве longWords.
+            
+// Проверяем, не равен ли индекс -1. Если он не равен -1, это означает, что слово words[i] найдено в массиве longWords.
+            if (indexInLongWords !== -1) {
+// Переменная indexInLongWords хранит индекс, по которому находится текущее слово из массива words в массиве longWords.                 
+                words[i] = reversedWords[indexInLongWords];
+            }
+        }
+    }
+
+    // Сборка новой строки из слов
+    let result = "";
+    for (let i = 0; i < words.length; i++) {
+        result = result + words[i];
+        // Добавляем пробел между словами, если это не последнее слово
+        if (i < words.length - 1) {
+            result = result + " ";
+        }
+    }
+    return result;
+};
